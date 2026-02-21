@@ -62,8 +62,8 @@ class ConvolutionalLayer(torch.nn.Module):
             Shape (N, P, H-M+1, W-M+1)
         """
         num_inputs = data_in.shape[0]
-        out_rows = data_in.shape[1] - self.kernel_size + 1
-        out_cols = data_in.shape[2] - self.kernel_size + 1
+        out_rows = data_in.shape[2] - self.kernel_size + 1
+        out_cols = data_in.shape[3] - self.kernel_size + 1
 
         data_out = torch.zeros(
             (num_inputs, self.num_kernels, out_rows, out_cols),
