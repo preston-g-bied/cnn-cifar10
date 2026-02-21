@@ -125,6 +125,7 @@ class TanhLayer(torch.nn.Module):
     
 class AvgPool2DLayer(torch.nn.Module):
     def __init__(self, kernel_size: int, stride: int):
+        super().__init__()
         self.kernel_size = kernel_size
         self.stride = stride
 
@@ -146,6 +147,7 @@ class AvgPool2DLayer(torch.nn.Module):
     
 class MaxPool2DLayer(torch.nn.Module):
     def __init__(self, kernel_size: int, stride: int):
+        super().__init__()
         self.kernel_size = kernel_size
         self.stride = stride
 
