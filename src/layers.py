@@ -2,12 +2,13 @@ import torch
 import math
 
 class ConvolutionalLayer(torch.nn.Module):
-    def __init__(self, num_channels: int, num_kernels: int, kernel_size: int):
+    def __init__(self, num_channels: int, num_kernels: int, kernel_size: int, padding: int = 0):
         """
         Args:
             num_channels: Number of input channels
             num_kernels: Number of kernels to learn (P)
             kernel_size: Spatial size of each kernel (MxM)
+            padding: Amount of padding, defaults to 0
         """
         super().__init__()
         self.__kernel = torch.nn.Parameter(
@@ -17,6 +18,7 @@ class ConvolutionalLayer(torch.nn.Module):
 
         self.kernel_size = kernel_size
         self.num_kernels = num_kernels
+        self.padding = padding
 
     def setKernel(self, K: torch.Tensor):
         self.__kernel.data = K
@@ -61,6 +63,11 @@ class ConvolutionalLayer(torch.nn.Module):
         Returns:
             Shape (N, P, H-M+1, W-M+1)
         """
+        if self.padding > 0:
+            data_in = torch.nn.functional.pad(
+                data_in, (self.padding, self.padding, self.padding, self.padding)
+            )
+
         num_inputs = data_in.shape[0]
         out_rows = data_in.shape[2] - self.kernel_size + 1
         out_cols = data_in.shape[3] - self.kernel_size + 1
@@ -108,3 +115,52 @@ class SoftmaxLayer(torch.nn.Module):
         data_in_shifted = data_in - data_in.max(dim=self.dim, keepdim=True).values
         exp_x = torch.exp(data_in_shifted)
         return exp_x / exp_x.sum(dim=self.dim, keepdim=True)
+    
+class TanhLayer(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, data_in: torch.Tensor) -> torch.Tensor:
+        return torch.tanh(data_in)
+    
+class AvgPool2DLayer(torch.nn.Module):
+    def __init__(self, kernel_size: int, stride: int):
+        self.kernel_size = kernel_size
+        self.stride = stride
+
+    def forward(self, data_in: torch.Tensor) -> torch.Tensor:
+        N, D, H, W = data_in.shape
+
+        H_out = (H - self.kernel_size) // self.stride + 1
+        W_out = (W - self.kernel_size) // self.stride + 1
+
+        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float)
+
+        for i in range(H_out):
+            for j in range(W_out):
+                r = i * self.stride
+                c = j * self.stride
+                data_out[:, :, i, j] = data_in[:, :, r:r+self.kernel_size, c:c+self.kernel_size].mean(dim=(-2, -1))
+
+        return data_out
+    
+class MaxPool2DLayer(torch.nn.Module):
+    def __init__(self, kernel_size: int, stride: int):
+        self.kernel_size = kernel_size
+        self.stride = stride
+
+    def forward(self, data_in: torch.Tensor) -> torch.Tensor:
+        N, D, H, W = data_in.shape
+
+        H_out = (H - self.kernel_size) // self.stride + 1
+        W_out = (W - self.kernel_size) // self.stride + 1
+
+        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float)
+
+        for i in range(H_out):
+            for j in range(W_out):
+                r = i * self.stride
+                c = j * self.stride
+                data_out[:, :, i, j] = data_in[:, :, r:r+self.kernel_size, c:c+self.kernel_size].amax(dim=(-2, -1))
+
+        return data_out
