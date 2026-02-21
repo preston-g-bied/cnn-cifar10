@@ -1,0 +1,9 @@
+stages:
+  prepare:
+    cmd: python src/data.py
+    params:
+      - params.yaml:
+        - data
+        - train
+    outs:
+      - data/cifar10

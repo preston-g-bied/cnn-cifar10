@@ -1,0 +1,18 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/data.py
+    params:
+      params.yaml:
+        data:
+          data_dir: data/cifar10
+          num_workers: 4
+        train:
+          batch_size: 64
+          device: mps
+    outs:
+    - path: data/cifar10
+      hash: md5
+      md5: e252d2c8ba36d1ab3e21a873ab62daa3.dir
+      size: 356712185
+      nfiles: 9

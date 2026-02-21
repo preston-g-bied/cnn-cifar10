@@ -77,7 +77,7 @@ coverage.xml
 
 data/
 
-models/
+/models/
 *.pt
 *.pth
 *.ckpt
