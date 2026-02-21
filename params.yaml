@@ -1,0 +1,36 @@
+exp1_lenet:
+  conv_channels: [6, 16]
+  kernel_size: 5
+  activation: tanh
+  pooling: avg
+  fc_dims: [120, 84]
+  dropout: 0.0
+  epochs: 30
+  lr: 0.001
+
+exp2_hybrid:
+  conv_channels: [32, 64]
+  kernel_size: 5
+  activation: relu
+  pooling: max
+  fc_dims: [120, 84]
+  dropout: 0.0
+  epochs: 30
+  lr: 0.001
+
+exp3_alexnet:
+  conv_channels: [64, 128, 256, 256]
+  kernel_size: 3
+  activation: relu
+  pooling: max
+  fc_dims: [1024, 256]
+  dropout: 0.5
+  epochs: 50
+  lr: 0.0003
+
+visualize:
+  num_sample_images: 8
+  saliency_smooth: true
+  saliency_n_smooth: 20
+  saliency_noise:std: 0.1
+  output_dir: plots
