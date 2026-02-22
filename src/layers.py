@@ -13,7 +13,7 @@ class ConvolutionalLayer(torch.nn.Module):
         super().__init__()
         self.__kernel = torch.nn.Parameter(
             0.01 * (torch.rand(num_kernels, num_channels, kernel_size, kernel_size,
-                               dtype=torch.double) - 0.5)
+                               dtype=torch.float32) - 0.5)
         )
 
         self.kernel_size = kernel_size
@@ -43,7 +43,7 @@ class ConvolutionalLayer(torch.nn.Module):
         out_rows = data_in.shape[1] - kernel_size + 1
         out_cols = data_in.shape[2] - kernel_size + 1
 
-        data_out = torch.zeros((out_rows, out_cols), dtype=torch.double)
+        data_out = torch.zeros((out_rows, out_cols), dtype=torch.float32)
 
         for chan in range(num_channels):
             for r in range(out_rows):
@@ -74,7 +74,7 @@ class ConvolutionalLayer(torch.nn.Module):
 
         data_out = torch.zeros(
             (num_inputs, self.num_kernels, out_rows, out_cols),
-            dtype=torch.double
+            dtype=torch.float32
         )
 
         for i in range(num_inputs):
@@ -90,10 +90,10 @@ class FullyConnectedLayer(torch.nn.Module):
         super().__init__()
         bound = 2 * math.sqrt(6 / (size_in + size_out))
         self.__weights = torch.nn.Parameter(
-            bound * (torch.rand(size_in, size_out, dtype=torch.double) - 0.5)
+            bound * (torch.rand(size_in, size_out, dtype=torch.float32) - 0.5)
         )
         self.__biases = torch.nn.Parameter(
-            torch.zeros(1, size_out, dtype=torch.double)
+            torch.zeros(1, size_out, dtype=torch.float32)
         )
 
     def forward(self, data_in: torch.Tensor) -> torch.Tensor:
