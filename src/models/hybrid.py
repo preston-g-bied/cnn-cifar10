@@ -9,7 +9,7 @@ class HybridNet(torch.nn.Module):
         self.pool = layers.MaxPool2DLayer(2, 2)
         self.relu = layers.ReLULayer()
         self.flatten = torch.nn.Flatten()
-        self.fc1 = layers.FullyConnectedLayer(576, 120)
+        self.fc1 = layers.FullyConnectedLayer(2304, 120)
         self.fc2 = layers.FullyConnectedLayer(120, 84)
         self.fc3 = layers.FullyConnectedLayer(84, 10)
 
