@@ -43,7 +43,7 @@ class ConvolutionalLayer(torch.nn.Module):
         out_rows = data_in.shape[1] - kernel_size + 1
         out_cols = data_in.shape[2] - kernel_size + 1
 
-        data_out = torch.zeros((out_rows, out_cols), dtype=torch.float32)
+        data_out = torch.zeros((out_rows, out_cols), dtype=torch.float32, device=data_in.device)
 
         for chan in range(num_channels):
             for r in range(out_rows):
@@ -55,7 +55,7 @@ class ConvolutionalLayer(torch.nn.Module):
 
         return data_out
     
-    def forward(self, data_in: torch.Tensor) -> torch.Tensor:
+    def old_forward(self, data_in: torch.Tensor) -> torch.Tensor:
         """
         Args:
             data_in: Shape (N, D, H, W)
@@ -74,7 +74,8 @@ class ConvolutionalLayer(torch.nn.Module):
 
         data_out = torch.zeros(
             (num_inputs, self.num_kernels, out_rows, out_cols),
-            dtype=torch.float32
+            dtype=torch.float32,
+            device=data_in.device
         )
 
         for i in range(num_inputs):
@@ -85,6 +86,37 @@ class ConvolutionalLayer(torch.nn.Module):
 
         return data_out
     
+    def forward(self, data_in: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            data_in: Shape (N, D, H, W)
+
+        Returns:
+            Shape (N, P, H-M+1, W-M+1)
+        """
+        N, D, H, W = data_in.shape
+
+        # Extract all sliding patches at once
+        # F.unfold output shape: (N, D*M*M, L) where L = H_out * W_out
+        unfolded = torch.nn.functional.unfold(
+            data_in,
+            kernel_size=self.kernel_size,
+            padding=self.padding
+        )
+
+        # Flatten each kernel from (P, D, M, M) -> (P, D*M*M)
+        kernel_matrix = self.__kernel.view(self.num_kernels, -1)
+
+        # Matmul: (1, P, D*M*M) @ (N, D*M*M, L) -> (N, P, L)
+        out = kernel_matrix.unsqueeze(0) @ unfolded
+
+        # Compute output spatial dimensions
+        H_out = (H + 2 * self.padding - self.kernel_size) + 1
+        W_out = (W + 2 * self.padding - self.kernel_size) + 1
+
+        # Reshape (N, P, L) -> (N, P, H_out, W_out)
+        return out.view(N, self.num_kernels, H_out, W_out)
+
 class FullyConnectedLayer(torch.nn.Module):
     def __init__(self, size_in: int, size_out: int):
         super().__init__()
@@ -135,7 +167,7 @@ class AvgPool2DLayer(torch.nn.Module):
         H_out = (H - self.kernel_size) // self.stride + 1
         W_out = (W - self.kernel_size) // self.stride + 1
 
-        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float)
+        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float32, device=data_in.device)
 
         for i in range(H_out):
             for j in range(W_out):
@@ -157,7 +189,7 @@ class MaxPool2DLayer(torch.nn.Module):
         H_out = (H - self.kernel_size) // self.stride + 1
         W_out = (W - self.kernel_size) // self.stride + 1
 
-        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float)
+        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float32, device=data_in.device)
 
         for i in range(H_out):
             for j in range(W_out):
