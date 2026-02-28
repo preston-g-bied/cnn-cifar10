@@ -137,7 +137,5 @@ def main():
     per_channel_mean = images.mean(dim=(0, 2, 3))
     _logger.info(f"\n  Per-channel mean (should be ≈ 0): {per_channel_mean.tolist()}")
 
-    _logger.info("\n✅ data.py smoke-test passed.")
-
 if __name__ == "__main__":
     main()
