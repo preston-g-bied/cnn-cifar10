@@ -2,58 +2,13 @@
 src/train.py
 """
 
-import argparse
 import json
 import yaml
 import torch
 import logging
-import random
-import numpy as np
-import os
-
+from utils import seed_everything, get_device, parse_args, get_model
 from data import get_dataloaders
-
-from models.lenet import LeNet
-from models.hybrid import HybridNet
-from models.alexnet import AlexNet
-
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Train a CNN on CIFAR-10",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter
-    )
-
-    parser.add_argument(
-        "--experiment",
-        type=str,
-        choices=["exp1_lenet", "exp2_hybrid", "exp3_alexnet"],
-        required=True,
-        help="Which experiment to run"
-    )
-
-    parser.add_argument(
-        "-v", "--verbose",
-        action="store_true",
-        help="Enable debug logging (default: INFO)"
-    )
-    
-    return parser.parse_args()
-
-def seed_everything(seed: int) -> None:
-    random.seed(seed)
-    np.random.seed(seed)
-    torch.manual_seed(seed)
-    if torch.backends.mps.is_available():
-        torch.mps.manual_seed(seed)
-
-def get_device(device_str: str) -> torch.device:
-    if device_str == "mps" and torch.backends.mps.is_available():
-        device = torch.device("mps")
-    elif torch.cuda.is_available():
-        device = torch.device("cuda")
-    else:
-        device = torch.device("cpu")
-    return device
+import os
 
 def train_one_epoch(model: torch.nn.Module,
                     loader: torch.utils.data.DataLoader,
@@ -107,7 +62,7 @@ def evaluate(
     return avg_loss, accuracy
 
 def main():
-    args = parse_args()
+    args = parse_args(desc="Train a CNN on CIFAR-10")
 
     logging.basicConfig(
         level=logging.DEBUG if args.verbose else logging.INFO,
@@ -129,15 +84,7 @@ def main():
     device: torch.device = get_device(params["train"]["device"])
     _logger.info(f"Using device: {device}")
 
-    if experiment == "exp1_lenet":
-        model = LeNet()
-    elif experiment == "exp2_hybrid":
-        model = HybridNet()
-    elif experiment == "exp3_alexnet":
-        model = AlexNet()
-    else:
-        _logger.error("No model found for this experiment, using LeNet")
-        model = LeNet()
+    model = get_model(experiment, _logger)
 
     model = model.to(device)
     _logger.debug(f"Model parameters: {sum(p.numel() for p in model.parameters())}")
