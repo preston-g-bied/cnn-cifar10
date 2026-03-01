@@ -10,9 +10,176 @@ stages:
         train:
           batch_size: 64
           device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
     outs:
     - path: data/cifar10
       hash: md5
       md5: e252d2c8ba36d1ab3e21a873ab62daa3.dir
       size: 356712185
       nfiles: 9
+  train_exp1:
+    cmd: python src/train.py -v --experiment exp1_lenet
+    deps:
+    - path: data/cifar10
+      hash: md5
+      md5: e252d2c8ba36d1ab3e21a873ab62daa3.dir
+      size: 356712185
+      nfiles: 9
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 072b876c6eb68318c4403acb40b86333
+      size: 6775
+    - path: src/models/lenet.py
+      hash: md5
+      md5: 9fbdddfdea54a9d28f67d6c36f34115a
+      size: 1039
+    - path: src/train.py
+      hash: md5
+      md5: 6718bda4efd6148fe479ec5ef18ca1af
+      size: 5748
+    params:
+      params.yaml:
+        exp1_lenet:
+          conv_channels:
+          - 6
+          - 16
+          kernel_size: 5
+          activation: tanh
+          pooling: avg
+          fc_dims:
+          - 120
+          - 84
+          dropout: 0.0
+          epochs: 30
+          lr: 0.001
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp1_lenet/results.json
+      hash: md5
+      md5: 945bb618ad908196850072ac3435756c
+      size: 4872
+    - path: models/exp1_lenet/best.pt
+      hash: md5
+      md5: c32c35be8655d91d40310a484eec16ae
+      size: 335907
+  train_exp2:
+    cmd: python src/train.py -v --experiment exp2_hybrid
+    deps:
+    - path: data/cifar10
+      hash: md5
+      md5: e252d2c8ba36d1ab3e21a873ab62daa3.dir
+      size: 356712185
+      nfiles: 9
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 072b876c6eb68318c4403acb40b86333
+      size: 6775
+    - path: src/models/hybrid.py
+      hash: md5
+      md5: 87307b8fe9001d6a4019566697aefa9e
+      size: 1046
+    - path: src/train.py
+      hash: md5
+      md5: 6718bda4efd6148fe479ec5ef18ca1af
+      size: 5748
+    params:
+      params.yaml:
+        exp2_hybrid:
+          conv_channels:
+          - 32
+          - 64
+          kernel_size: 5
+          activation: relu
+          pooling: max
+          fc_dims:
+          - 120
+          - 84
+          dropout: 0.0
+          epochs: 30
+          lr: 0.001
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp2_hybrid/results.json
+      hash: md5
+      md5: ed56517209d316a4c343fc98c0e57bae
+      size: 4878
+    - path: models/exp2_hybrid/best.pt
+      hash: md5
+      md5: 4f2a7150e3d38ab7159fbdc81a28b793
+      size: 1368291
+  train_exp3:
+    cmd: python src/train.py -v --experiment exp3_alexnet
+    deps:
+    - path: data/cifar10
+      hash: md5
+      md5: e252d2c8ba36d1ab3e21a873ab62daa3.dir
+      size: 356712185
+      nfiles: 9
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 072b876c6eb68318c4403acb40b86333
+      size: 6775
+    - path: src/models/alexnet.py
+      hash: md5
+      md5: 9324c832c5401e3d84b6292494cf32ac
+      size: 1434
+    - path: src/train.py
+      hash: md5
+      md5: 6718bda4efd6148fe479ec5ef18ca1af
+      size: 5748
+    params:
+      params.yaml:
+        exp3_alexnet:
+          conv_channels:
+          - 64
+          - 128
+          - 256
+          - 256
+          kernel_size: 3
+          activation: relu
+          pooling: max
+          fc_dims:
+          - 1024
+          - 256
+          dropout: 0.5
+          epochs: 50
+          lr: 0.0003
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp3_alexnet/results.json
+      hash: md5
+      md5: 6535cc863075ee78b371bf43bbdf415e
+      size: 8133
+    - path: models/exp3_alexnet/best.pt
+      hash: md5
+      md5: fbd4b4f94dbbd0f31966c3149cb0b1dc
+      size: 21685781

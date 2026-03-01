@@ -7,3 +7,54 @@ stages:
         - train
     outs:
       - data/cifar10
+  train_exp1:
+    cmd: python src/train.py -v --experiment exp1_lenet
+    deps:
+      - src/train.py
+      - src/data.py
+      - data/cifar10
+      - src/models/lenet.py
+      - src/layers.py
+    params:
+      - params.yaml:
+        - train
+        - exp1_lenet
+    outs:
+      - models/exp1_lenet/best.pt
+    metrics:
+      - metrics/exp1_lenet/results.json:
+          cache: false
+  train_exp2:
+    cmd: python src/train.py -v --experiment exp2_hybrid
+    deps:
+      - src/train.py
+      - src/data.py
+      - data/cifar10
+      - src/models/hybrid.py
+      - src/layers.py
+    params:
+      - params.yaml:
+        - train
+        - exp2_hybrid
+    outs:
+      - models/exp2_hybrid/best.pt
+    metrics:
+      - metrics/exp2_hybrid/results.json:
+          cache: false
+  train_exp3:
+    cmd: python src/train.py -v --experiment exp3_alexnet
+    deps:
+      - src/train.py
+      - src/data.py
+      - data/cifar10
+      - src/models/alexnet.py
+      - src/layers.py
+    params:
+      - params.yaml:
+        - train
+        - exp3_alexnet
+    outs:
+      - models/exp3_alexnet/best.pt
+    metrics:
+      - metrics/exp3_alexnet/results.json:
+          cache: false

@@ -5,6 +5,9 @@ data:
 train:
   batch_size: 64
   device: mps
+  seed: 49
+  optimizer: adam
+  weight_decay: 0.0
 
 exp1_lenet:
   conv_channels: [6, 16]
