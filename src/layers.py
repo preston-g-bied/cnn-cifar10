@@ -162,20 +162,13 @@ class AvgPool2DLayer(torch.nn.Module):
         self.stride = stride
 
     def forward(self, data_in: torch.Tensor) -> torch.Tensor:
-        N, D, H, W = data_in.shape
-
+        patches = torch.nn.functional.unfold(data_in, kernel_size=self.kernel_size, stride=self.stride)
+        # patches: (N, D*K*K, L)
+        N, C, H, W = data_in.shape
         H_out = (H - self.kernel_size) // self.stride + 1
         W_out = (W - self.kernel_size) // self.stride + 1
-
-        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float32, device=data_in.device)
-
-        for i in range(H_out):
-            for j in range(W_out):
-                r = i * self.stride
-                c = j * self.stride
-                data_out[:, :, i, j] = data_in[:, :, r:r+self.kernel_size, c:c+self.kernel_size].mean(dim=(-2, -1))
-
-        return data_out
+        patches = patches.view(N, C, self.kernel_size * self.kernel_size, H_out * W_out)
+        return patches.mean(dim=2).view(N, C, H_out, W_out)
     
 class MaxPool2DLayer(torch.nn.Module):
     def __init__(self, kernel_size: int, stride: int):
@@ -184,17 +177,10 @@ class MaxPool2DLayer(torch.nn.Module):
         self.stride = stride
 
     def forward(self, data_in: torch.Tensor) -> torch.Tensor:
-        N, D, H, W = data_in.shape
-
+        patches = torch.nn.functional.unfold(data_in, kernel_size=self.kernel_size, stride=self.stride)
+        # patches: (N, D*K*K, L)
+        N, C, H, W = data_in.shape
         H_out = (H - self.kernel_size) // self.stride + 1
         W_out = (W - self.kernel_size) // self.stride + 1
-
-        data_out = torch.zeros((N, D, H_out, W_out), dtype=torch.float32, device=data_in.device)
-
-        for i in range(H_out):
-            for j in range(W_out):
-                r = i * self.stride
-                c = j * self.stride
-                data_out[:, :, i, j] = data_in[:, :, r:r+self.kernel_size, c:c+self.kernel_size].amax(dim=(-2, -1))
-
-        return data_out
+        patches = patches.view(N, C, self.kernel_size * self.kernel_size, H_out * W_out)
+        return patches.amax(dim=2).view(N, C, H_out, W_out)
