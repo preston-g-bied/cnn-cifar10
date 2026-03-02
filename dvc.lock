@@ -37,12 +37,12 @@ stages:
       size: 6775
     - path: src/models/lenet.py
       hash: md5
-      md5: 9fbdddfdea54a9d28f67d6c36f34115a
-      size: 1039
+      md5: a74024c1c095966018e700a3c1282144
+      size: 908
     - path: src/train.py
       hash: md5
-      md5: 6718bda4efd6148fe479ec5ef18ca1af
-      size: 5748
+      md5: 1dc33d3e25aa9a3ae97696355351d952
+      size: 4384
     params:
       params.yaml:
         exp1_lenet:
@@ -91,12 +91,12 @@ stages:
       size: 6775
     - path: src/models/hybrid.py
       hash: md5
-      md5: 87307b8fe9001d6a4019566697aefa9e
-      size: 1046
+      md5: 33da75a63beb0de2c36226f672d3ecca
+      size: 915
     - path: src/train.py
       hash: md5
-      md5: 6718bda4efd6148fe479ec5ef18ca1af
-      size: 5748
+      md5: 1dc33d3e25aa9a3ae97696355351d952
+      size: 4384
     params:
       params.yaml:
         exp2_hybrid:
@@ -145,12 +145,12 @@ stages:
       size: 6775
     - path: src/models/alexnet.py
       hash: md5
-      md5: 9324c832c5401e3d84b6292494cf32ac
-      size: 1434
+      md5: fc79354b04b4681154e7c30fdac39135
+      size: 1303
     - path: src/train.py
       hash: md5
-      md5: 6718bda4efd6148fe479ec5ef18ca1af
-      size: 5748
+      md5: 1dc33d3e25aa9a3ae97696355351d952
+      size: 4384
     params:
       params.yaml:
         exp3_alexnet:
@@ -183,3 +183,111 @@ stages:
       hash: md5
       md5: fbd4b4f94dbbd0f31966c3149cb0b1dc
       size: 21685781
+  eval_exp1:
+    cmd: python src/evaluate.py -v --experiment exp1_lenet
+    deps:
+    - path: models/exp1_lenet/best.pt
+      hash: md5
+      md5: c32c35be8655d91d40310a484eec16ae
+      size: 335907
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/evaluate.py
+      hash: md5
+      md5: 578a0e10f77a58d450fe3a1c77f59bb8
+      size: 3706
+    - path: src/utils.py
+      hash: md5
+      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
+      size: 1871
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp1_lenet/confusion_matrix.pt
+      hash: md5
+      md5: 89487bf120c4028022f0d6b0c121b4ca
+      size: 2408
+    - path: metrics/exp1_lenet/eval.json
+      hash: md5
+      md5: 0bb0b0700b0c443cc461ca6ac18173e4
+      size: 438
+  eval_exp2:
+    cmd: python src/evaluate.py -v --experiment exp2_hybrid
+    deps:
+    - path: models/exp2_hybrid/best.pt
+      hash: md5
+      md5: 4f2a7150e3d38ab7159fbdc81a28b793
+      size: 1368291
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/evaluate.py
+      hash: md5
+      md5: 578a0e10f77a58d450fe3a1c77f59bb8
+      size: 3706
+    - path: src/utils.py
+      hash: md5
+      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
+      size: 1871
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp2_hybrid/confusion_matrix.pt
+      hash: md5
+      md5: afc3a1f09a3606390670c7c87a50477d
+      size: 2408
+    - path: metrics/exp2_hybrid/eval.json
+      hash: md5
+      md5: 32ba4721b744fdb3d6764c09265bf4f5
+      size: 448
+  eval_exp3:
+    cmd: python src/evaluate.py -v --experiment exp3_alexnet
+    deps:
+    - path: models/exp3_alexnet/best.pt
+      hash: md5
+      md5: fbd4b4f94dbbd0f31966c3149cb0b1dc
+      size: 21685781
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/evaluate.py
+      hash: md5
+      md5: 578a0e10f77a58d450fe3a1c77f59bb8
+      size: 3706
+    - path: src/utils.py
+      hash: md5
+      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
+      size: 1871
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+    outs:
+    - path: metrics/exp3_alexnet/confusion_matrix.pt
+      hash: md5
+      md5: 3ba5383e98811cbd29ae3cfe6baf260c
+      size: 2408
+    - path: metrics/exp3_alexnet/eval.json
+      hash: md5
+      md5: b500e1bbf2ccbb8928b938ef5c91451f
+      size: 452

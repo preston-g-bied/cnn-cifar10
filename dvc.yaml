@@ -1,4 +1,7 @@
 stages:
+
+  ##### DATA PREP #####
+
   prepare:
     cmd: python src/data.py
     params:
@@ -7,6 +10,9 @@ stages:
         - train
     outs:
       - data/cifar10
+
+  ##### MODEL TRAINING #####
+
   train_exp1:
     cmd: python src/train.py -v --experiment exp1_lenet
     deps:
@@ -57,4 +63,54 @@ stages:
       - models/exp3_alexnet/best.pt
     metrics:
       - metrics/exp3_alexnet/results.json:
+          cache: false
+
+  ##### MODEL EVALUATION #####
+
+  eval_exp1:
+    cmd: python src/evaluate.py -v --experiment exp1_lenet
+    deps:
+      - src/evaluate.py
+      - src/utils.py
+      - src/data.py
+      - models/exp1_lenet/best.pt
+    params:
+      - params.yaml:
+        - train
+    outs:
+      - metrics/exp1_lenet/confusion_matrix.pt
+    metrics:
+      - metrics/exp1_lenet/eval.json:
+          cache: false
+
+  eval_exp2:
+    cmd: python src/evaluate.py -v --experiment exp2_hybrid
+    deps:
+      - src/evaluate.py
+      - src/utils.py
+      - src/data.py
+      - models/exp2_hybrid/best.pt
+    params:
+      - params.yaml:
+        - train
+    outs:
+      - metrics/exp2_hybrid/confusion_matrix.pt
+    metrics:
+      - metrics/exp2_hybrid/eval.json:
+          cache: false
+
+  eval_exp3:
+    cmd: python src/evaluate.py -v --experiment exp3_alexnet
+    deps:
+      - src/evaluate.py
+      - src/utils.py
+      - src/data.py
+      - models/exp3_alexnet/best.pt
+    params:
+      - params.yaml:
+        - train
+    outs:
+      - metrics/exp3_alexnet/confusion_matrix.pt
+    metrics:
+      - metrics/exp3_alexnet/eval.json:
           cache: false
