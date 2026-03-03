@@ -65,5 +65,13 @@ def get_model(experiment: str, logger: logging.Logger):
         model = LeNet()
     return model
 
+def load_model(exp_name: str, device: torch.device, logger: logging.Logger) -> torch.nn.Module:
+    model = get_model(exp_name, logger)
+    model_path = f"models/{exp_name}/best.pt"
+    model.load_state_dict(torch.load(model_path, weights_only=True, map_location=device))
+    model = model.to(device).eval()
+    logger.info(f"Loaded best checkpoint from {model_path}")
+    return model
+
 def count_parameters(model: torch.nn.Module) -> int:
     return sum(p.numel() for p in model.parameters() if p.requires_grad)

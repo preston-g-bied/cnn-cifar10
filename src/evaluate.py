@@ -7,17 +7,8 @@ import logging
 import yaml
 import json
 import os
-from utils import seed_everything, get_device, parse_args, get_model, count_parameters
+from utils import seed_everything, get_device, parse_args, load_model, count_parameters
 from data import get_dataloaders, get_class_names
-
-def load_model(exp_name: str, device: torch.device, logger: logging.Logger) -> torch.nn.Module:
-    model = get_model(exp_name, logger)
-    model_path = f"models/{exp_name}/best.pt"
-    model.load_state_dict(torch.load(model_path, weights_only=True))
-    model = model.to(device)
-    model.eval()
-    logger.info(f"Using best model for experiment {exp_name}")
-    return model
 
 def evaluate_model(
         model: torch.nn.Module,
@@ -25,7 +16,7 @@ def evaluate_model(
         loss_fn: torch.nn.Module,
         device: torch.device,
         logger: logging.Logger
-) -> tuple[float, float, list[torch.Tensor], torch.Tensor]:
+) -> tuple[float, float, list[float], torch.Tensor]:
     model.eval()
     total_loss, correct, total = 0.0, 0, 0
     num_classes = 10
@@ -41,7 +32,6 @@ def evaluate_model(
 
             logits = model(images)
             loss = loss_fn(logits, labels)
-
             preds = logits.argmax(dim=1)
 
             total_loss += loss.item()
