@@ -33,8 +33,8 @@ stages:
       size: 4170
     - path: src/layers.py
       hash: md5
-      md5: 072b876c6eb68318c4403acb40b86333
-      size: 6775
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
     - path: src/models/lenet.py
       hash: md5
       md5: a74024c1c095966018e700a3c1282144
@@ -67,11 +67,11 @@ stages:
     outs:
     - path: metrics/exp1_lenet/results.json
       hash: md5
-      md5: 945bb618ad908196850072ac3435756c
-      size: 4872
+      md5: 38a2310c7092dfa941d655ac834a11e9
+      size: 4877
     - path: models/exp1_lenet/best.pt
       hash: md5
-      md5: c32c35be8655d91d40310a484eec16ae
+      md5: 452819639b7f419255fba93c08446750
       size: 335907
   train_exp2:
     cmd: python src/train.py -v --experiment exp2_hybrid
@@ -87,8 +87,8 @@ stages:
       size: 4170
     - path: src/layers.py
       hash: md5
-      md5: 072b876c6eb68318c4403acb40b86333
-      size: 6775
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
     - path: src/models/hybrid.py
       hash: md5
       md5: 33da75a63beb0de2c36226f672d3ecca
@@ -141,8 +141,8 @@ stages:
       size: 4170
     - path: src/layers.py
       hash: md5
-      md5: 072b876c6eb68318c4403acb40b86333
-      size: 6775
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
     - path: src/models/alexnet.py
       hash: md5
       md5: fc79354b04b4681154e7c30fdac39135
@@ -188,7 +188,7 @@ stages:
     deps:
     - path: models/exp1_lenet/best.pt
       hash: md5
-      md5: c32c35be8655d91d40310a484eec16ae
+      md5: 452819639b7f419255fba93c08446750
       size: 335907
     - path: src/data.py
       hash: md5
@@ -196,12 +196,12 @@ stages:
       size: 4170
     - path: src/evaluate.py
       hash: md5
-      md5: 578a0e10f77a58d450fe3a1c77f59bb8
-      size: 3706
+      md5: db1a8b146052577a515ab11734d58c73
+      size: 3321
     - path: src/utils.py
       hash: md5
-      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
-      size: 1871
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
     params:
       params.yaml:
         train:
@@ -213,12 +213,12 @@ stages:
     outs:
     - path: metrics/exp1_lenet/confusion_matrix.pt
       hash: md5
-      md5: 89487bf120c4028022f0d6b0c121b4ca
+      md5: ccb0e6d640058f7ebe9aece619ee4f5e
       size: 2408
     - path: metrics/exp1_lenet/eval.json
       hash: md5
-      md5: 0bb0b0700b0c443cc461ca6ac18173e4
-      size: 438
+      md5: 343dfb709c18d15b3cb0922e4817a42c
+      size: 452
   eval_exp2:
     cmd: python src/evaluate.py -v --experiment exp2_hybrid
     deps:
@@ -232,12 +232,12 @@ stages:
       size: 4170
     - path: src/evaluate.py
       hash: md5
-      md5: 578a0e10f77a58d450fe3a1c77f59bb8
-      size: 3706
+      md5: db1a8b146052577a515ab11734d58c73
+      size: 3321
     - path: src/utils.py
       hash: md5
-      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
-      size: 1871
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
     params:
       params.yaml:
         train:
@@ -268,12 +268,12 @@ stages:
       size: 4170
     - path: src/evaluate.py
       hash: md5
-      md5: 578a0e10f77a58d450fe3a1c77f59bb8
-      size: 3706
+      md5: db1a8b146052577a515ab11734d58c73
+      size: 3321
     - path: src/utils.py
       hash: md5
-      md5: ebb0e6b9927ad98a3ede4da0aa107ae6
-      size: 1871
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
     params:
       params.yaml:
         train:
@@ -291,3 +291,144 @@ stages:
       hash: md5
       md5: b500e1bbf2ccbb8928b938ef5c91451f
       size: 452
+  visualize_exp1:
+    cmd: python src/visualize.py -v --experiment exp1_lenet
+    deps:
+    - path: models/exp1_lenet/best.pt
+      hash: md5
+      md5: 452819639b7f419255fba93c08446750
+      size: 335907
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
+    - path: src/models/lenet.py
+      hash: md5
+      md5: a74024c1c095966018e700a3c1282144
+      size: 908
+    - path: src/utils.py
+      hash: md5
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
+    - path: src/visualize.py
+      hash: md5
+      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      size: 10682
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+        visualize:
+          num_sample_images: 8
+          saliency_smooth: true
+          saliency_n_smooth: 20
+          saliency_noise:std: 0.1
+          output_dir: plots
+    outs:
+    - path: plots/exp1_lenet
+      hash: md5
+      md5: 582e4b2d6c1ed4305ddad95869f9ac2c.dir
+      size: 608770
+      nfiles: 4
+  visualize_exp2:
+    cmd: python src/visualize.py -v --experiment exp2_hybrid
+    deps:
+    - path: models/exp2_hybrid/best.pt
+      hash: md5
+      md5: 4f2a7150e3d38ab7159fbdc81a28b793
+      size: 1368291
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
+    - path: src/models/hybrid.py
+      hash: md5
+      md5: 33da75a63beb0de2c36226f672d3ecca
+      size: 915
+    - path: src/utils.py
+      hash: md5
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
+    - path: src/visualize.py
+      hash: md5
+      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      size: 10682
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+        visualize:
+          num_sample_images: 8
+          saliency_smooth: true
+          saliency_n_smooth: 20
+          saliency_noise:std: 0.1
+          output_dir: plots
+    outs:
+    - path: plots/exp2_hybrid
+      hash: md5
+      md5: 04ccc27d27954b0a63ee63e2bf72e5eb.dir
+      size: 1007995
+      nfiles: 4
+  visualize_exp3:
+    cmd: python src/visualize.py -v --experiment exp3_alexnet
+    deps:
+    - path: models/exp3_alexnet/best.pt
+      hash: md5
+      md5: fbd4b4f94dbbd0f31966c3149cb0b1dc
+      size: 21685781
+    - path: src/data.py
+      hash: md5
+      md5: 6ea490ea001ec866dab986849a436bfc
+      size: 4170
+    - path: src/layers.py
+      hash: md5
+      md5: 1e9b683623cfa67cecb44cbbe1496169
+      size: 6589
+    - path: src/models/alexnet.py
+      hash: md5
+      md5: fc79354b04b4681154e7c30fdac39135
+      size: 1303
+    - path: src/utils.py
+      hash: md5
+      md5: 67cea28bae35e634cfa539407b9e8883
+      size: 2258
+    - path: src/visualize.py
+      hash: md5
+      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      size: 10682
+    params:
+      params.yaml:
+        train:
+          batch_size: 64
+          device: mps
+          seed: 49
+          optimizer: adam
+          weight_decay: 0.0
+        visualize:
+          num_sample_images: 8
+          saliency_smooth: true
+          saliency_n_smooth: 20
+          saliency_noise:std: 0.1
+          output_dir: plots
+    outs:
+    - path: plots/exp3_alexnet
+      hash: md5
+      md5: e7f1cc9754f28db218e09eff2b6cba2e.dir
+      size: 1344987
+      nfiles: 6

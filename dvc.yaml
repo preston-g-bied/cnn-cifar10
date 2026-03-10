@@ -114,3 +114,53 @@ stages:
     metrics:
       - metrics/exp3_alexnet/eval.json:
           cache: false
+
+  ##### VISUALIZATION #####
+
+  visualize_exp1:
+    cmd: python src/visualize.py -v --experiment exp1_lenet
+    deps:
+      - src/visualize.py
+      - src/utils.py
+      - src/data.py
+      - src/layers.py
+      - src/models/lenet.py
+      - models/exp1_lenet/best.pt
+    params:
+      - params.yaml:
+        - train
+        - visualize
+    outs:
+      - plots/exp1_lenet
+
+  visualize_exp2:
+    cmd: python src/visualize.py -v --experiment exp2_hybrid
+    deps:
+      - src/visualize.py
+      - src/utils.py
+      - src/data.py
+      - src/layers.py
+      - src/models/hybrid.py
+      - models/exp2_hybrid/best.pt
+    params:
+      - params.yaml:
+        - train
+        - visualize
+    outs:
+      - plots/exp2_hybrid
+
+  visualize_exp3:
+    cmd: python src/visualize.py -v --experiment exp3_alexnet
+    deps:
+      - src/visualize.py
+      - src/utils.py
+      - src/data.py
+      - src/layers.py
+      - src/models/alexnet.py
+      - models/exp3_alexnet/best.pt
+    params:
+      - params.yaml:
+        - train
+        - visualize
+    outs:
+      - plots/exp3_alexnet
