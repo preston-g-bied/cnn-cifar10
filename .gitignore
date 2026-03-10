@@ -85,9 +85,6 @@ data/
 .dvc/cache/
 .dvc/tmp/
 
-plots/
-metrics/
-
 __pycache__/
 *.py[cod]
 *.pyo
