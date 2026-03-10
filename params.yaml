@@ -43,5 +43,5 @@ visualize:
   num_sample_images: 8
   saliency_smooth: true
   saliency_n_smooth: 20
-  saliency_noise:std: 0.1
+  saliency_noise_std: 0.1
   output_dir: plots
