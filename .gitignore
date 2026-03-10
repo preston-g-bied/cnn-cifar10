@@ -76,6 +76,8 @@ coverage.xml
 .vscode/
 
 data/
+plots/
+metrics/
 
 /models/
 *.pt

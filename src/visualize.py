@@ -100,7 +100,7 @@ def visualize_kernels(model: torch.nn.Module, exp_name: str, logger: logging.Log
         k = kernels[i].float()
         k_min = k.min()
         k_max = k.max()
-        k = (k - k_min) / (k_max - k_min * 1e-8)
+        k = (k - k_min) / (k_max - k_min + 1e-8)
         rgb_kernels.append(k.permute(1, 2, 0).numpy())
 
     ncols = min(P, 8)

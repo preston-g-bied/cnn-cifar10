@@ -316,7 +316,7 @@ stages:
       size: 2258
     - path: src/visualize.py
       hash: md5
-      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      md5: a648d70f4416f0772083ce0e49ec0f22
       size: 10682
     params:
       params.yaml:
@@ -335,8 +335,8 @@ stages:
     outs:
     - path: plots/exp1_lenet
       hash: md5
-      md5: 582e4b2d6c1ed4305ddad95869f9ac2c.dir
-      size: 608770
+      md5: a9ac60327b07188950c9aafd4a31f992.dir
+      size: 609146
       nfiles: 4
   visualize_exp2:
     cmd: python src/visualize.py -v --experiment exp2_hybrid
@@ -363,7 +363,7 @@ stages:
       size: 2258
     - path: src/visualize.py
       hash: md5
-      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      md5: a648d70f4416f0772083ce0e49ec0f22
       size: 10682
     params:
       params.yaml:
@@ -382,8 +382,8 @@ stages:
     outs:
     - path: plots/exp2_hybrid
       hash: md5
-      md5: 04ccc27d27954b0a63ee63e2bf72e5eb.dir
-      size: 1007995
+      md5: ceba370cc04816121db25b86bbd5fa93.dir
+      size: 1008827
       nfiles: 4
   visualize_exp3:
     cmd: python src/visualize.py -v --experiment exp3_alexnet
@@ -410,7 +410,7 @@ stages:
       size: 2258
     - path: src/visualize.py
       hash: md5
-      md5: 82f4c1cb1341629ba1eeef6f2657c1c0
+      md5: a648d70f4416f0772083ce0e49ec0f22
       size: 10682
     params:
       params.yaml:
@@ -429,6 +429,6 @@ stages:
     outs:
     - path: plots/exp3_alexnet
       hash: md5
-      md5: e7f1cc9754f28db218e09eff2b6cba2e.dir
-      size: 1344987
+      md5: 66dcb58646d0b2b6ce1a6ab961871eaf.dir
+      size: 1346050
       nfiles: 6
